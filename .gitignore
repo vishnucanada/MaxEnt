@@ -1,0 +1,6 @@
+data/
+
+*.config
+*.ini
+*.png
+/__pycache__/
