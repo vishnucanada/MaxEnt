@@ -63,9 +63,11 @@ def main():
         S, N = merge([institution_sketch(d, omega) for d in banks])
 
         for i, eps in enumerate(epsilons):
-            # HDC-maxent under central DP (noise the merged sum once)
+            # HDC-maxent under central DP (noise the merged sum once).
+            # reg > 0 = relaxed maxent: required because DP noise makes the
+            # moments infeasible for exact matching.
             S_dp = privatize(S, eps, delta, rng, local_count=1)
-            hdc_pdf = readout(S_dp, N, omega, grid)
+            hdc_pdf = readout(S_dp, N, omega, grid, reg=1e-3)
             hdc_l1[i, s] = l1(hdc_pdf, truth, grid)
             v_h, _ = var_es(hdc_pdf, grid, 0.99)
             hdc_var[i, s] = abs(v_h - v_true)
