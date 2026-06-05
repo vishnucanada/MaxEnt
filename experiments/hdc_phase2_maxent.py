@@ -21,8 +21,8 @@ from experiments.hdc_phase1_kde import sample, true_pdf, l1_error
 def main():
     rng = np.random.default_rng(0)
     N = 4000
-    N_FREQ = 4                 # Fourier freqs -> 8 constraints (cos+sin)
-    POLY_ORDER = 8             # 8 polynomial constraints (matched count)
+    N_FREQ = 2                 # Fourier freqs -> 4 constraints (cos+sin)
+    POLY_ORDER = 4             # 4 polynomial constraints (README's setting, matched count)
 
     print(f"{'dist':<12}{'poly-maxent L1':>16}{'fourier-maxent L1':>20}")
     print("-" * 48)
