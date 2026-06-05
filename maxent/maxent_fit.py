@@ -20,7 +20,7 @@ from scipy.optimize import minimize
 from scipy.special import logsumexp
 
 
-def fit_maxent_from_moments(mu, feature_fn, grid):
+def fit_maxent_from_moments(mu, feature_fn, grid, reg=0.0):
     """Fit a maximum-entropy density to target moments `mu` directly.
 
     This is the streaming-friendly entry point: `mu` can come from an online
@@ -29,6 +29,11 @@ def fit_maxent_from_moments(mu, feature_fn, grid):
     mu          : (M,) target moments
     feature_fn  : x (array) -> (len(x), M) feature matrix
     grid        : 1-D integration grid spanning the support
+    reg         : L2 penalty on lambdas. 0 = exact moment matching; reg > 0 is
+                  the RELAXED maxent (Gaussian slack on the constraints / a
+                  Gaussian prior on lambdas). Required when `mu` is noisy or
+                  infeasible (e.g. after differential-privacy noise), where exact
+                  matching makes the dual unbounded.
 
     Returns (pdf_on_grid, lambdas).
     """
@@ -40,8 +45,9 @@ def fit_maxent_from_moments(mu, feature_fn, grid):
         scores = phi_grid @ lam + log_w                 # (G,)
         logZ = logsumexp(scores)
         p = np.exp(scores - logZ)                       # grid probabilities, sum=1
-        grad = phi_grid.T @ p - mu
-        return logZ - lam @ mu, grad
+        grad = phi_grid.T @ p - mu + reg * lam
+        val = logZ - lam @ mu + 0.5 * reg * lam @ lam
+        return val, grad
 
     res = minimize(objective, np.zeros(mu.shape[0]), jac=True, method="L-BFGS-B",
                    options={"maxiter": 2000})

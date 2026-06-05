@@ -55,11 +55,15 @@ def privatize(S, epsilon, delta, rng, local_count=1):
     return S + noise
 
 
-def readout(S, N, omega, grid):
-    """Maximum-entropy global density from a (possibly privatized) sum S."""
+def readout(S, N, omega, grid, reg=0.0):
+    """Maximum-entropy global density from a (possibly privatized) sum S.
+
+    Use reg > 0 (relaxed maxent) whenever S carries DP noise -- exact moment
+    matching is unstable on noisy/infeasible moments.
+    """
     H = S / N
     mu = np.concatenate([H.real, H.imag])
-    pdf, _ = fit_maxent_from_moments(mu, fourier_features(omega), grid)
+    pdf, _ = fit_maxent_from_moments(mu, fourier_features(omega), grid, reg=reg)
     return pdf
 
 
