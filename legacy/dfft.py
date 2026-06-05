@@ -1,12 +1,12 @@
 """Reconstruct a signal via FFT round-trip and report the reconstruction RMSE.
 
-Run from the repo root:  python -m experiments.dfft
+Run from the repo root:  python -m legacy.dfft
 """
 
 import numpy as np
 import matplotlib.pyplot as plt
 
-from maxent import rmse
+from legacy.metrics import rmse
 from maxent.data import OUTPUT_DIR
 
 

@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from .core import pdf
-from .data import OUTPUT_DIR
+from maxent.data import OUTPUT_DIR
 
 
 def plot_distributions(data, bins, lambdas_mle, lambdas_fidelity, col_name, subdir=""):

@@ -1,13 +1,14 @@
 """Fit the max-entropy distribution to every numeric column of a dataset,
 by both MLE and fidelity, and plot the result.
 
-Run from the repo root:  python -m experiments.combined
+Run from the repo root:  python -m legacy.combined
 """
 
 import numpy as np
 
-from maxent import load_csv, normalize, numeric_columns, fit
-from maxent.plotting import plot_distributions
+from legacy.io import load_csv, normalize, numeric_columns
+from legacy.core import fit
+from legacy.plotting import plot_distributions
 
 DATASET = "cars_data.csv"   # or "wind_turbine_data.csv"
 INITIAL_GUESS = [0.0, 0.0, 0.0, 0.0]

@@ -1,7 +1,7 @@
 """Numerical Taylor/Maclaurin approximation of a sampled function using finite
 differences for the first four derivatives.
 
-Run from the repo root:  python -m experiments.maclaurin
+Run from the repo root:  python -m legacy.maclaurin
 """
 
 import math
@@ -9,7 +9,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-from maxent import rmse
+from legacy.metrics import rmse
 from maxent.data import OUTPUT_DIR
 
 

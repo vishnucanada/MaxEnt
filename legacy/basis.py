@@ -5,7 +5,7 @@ exponential / polynomial / trigonometric basis via least squares, then
 compare actual vs simulated entropy and fidelity. Does not scale (dense
 n x n design matrix) but kept for comparison.
 
-Run from the repo root:  python -m experiments.basis
+Run from the repo root:  python -m legacy.basis
 """
 
 import warnings
@@ -13,11 +13,9 @@ import warnings
 import numpy as np
 from sklearn.metrics import root_mean_squared_error, r2_score
 
-from maxent import (
-    load_csv, numeric_columns,
-    histogram_probabilities, entropy, compute_fidelity,
-)
-from maxent.plotting import plot_basis_analysis
+from legacy.io import load_csv, numeric_columns
+from legacy.metrics import histogram_probabilities, entropy, compute_fidelity
+from legacy.plotting import plot_basis_analysis
 
 warnings.filterwarnings("ignore")
 

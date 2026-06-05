@@ -1,7 +1,7 @@
 """Guess a column's distribution family from moments, then overlay a sample
 from the guessed family against the empirical KDE.
 
-Run from the repo root:  python -m experiments.sampling_data
+Run from the repo root:  python -m legacy.sampling_data
 """
 
 import numpy as np
@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
 
-from maxent import load_csv, numeric_columns
+from legacy.io import load_csv, numeric_columns
 
 DATASET = "cars_data.csv"
 

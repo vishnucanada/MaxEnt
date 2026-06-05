@@ -1,7 +1,7 @@
 """Interactive Dash app: see how lambda_2, lambda_3 and the center (average)
 reshape the max-entropy density. Uses the shared `maxent.core.pdf`.
 
-Run from the repo root:  python -m experiments.visualizer
+Run from the repo root:  python -m legacy.visualizer
 """
 
 import numpy as np
@@ -11,7 +11,7 @@ from dash import dcc, html
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 
-from maxent.core import pdf
+from legacy.core import pdf
 
 app = dash.Dash(__name__)
 
