@@ -3,4 +3,6 @@ data/
 *.config
 *.ini
 *.png
-/__pycache__/
+__pycache__/
+outputs/
+.claude

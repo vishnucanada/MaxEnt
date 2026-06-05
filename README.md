@@ -37,11 +37,28 @@ $
 $
 Where p and q are the probabilities related to the distribution.
 
-### This REPO/Folder Structure 
-The primary code explained above is in the folder: Maximum Entropy Principle, in the file combined.py
-The visualizer.py is a strictly visualization purposes application to show how changing the lambdas will affect the distribution
-/Basis/ was another approach to achieve similar results, but it does not scale well, because it uses least squares on a massive matrix
-/data/ is the data containts arbitary datasets this method was used to test, 
+### This REPO/Folder Structure
+The project is organized as a small reusable package plus thin experiment scripts:
+
+```
+maxent/                # the reusable library (single source of truth)
+  core.py              #   exp-family pdf, constraints, unified fit(objective=...)
+  metrics.py           #   fidelity, entropy, rmse, histogram probabilities
+  data.py              #   csv loading, normalization, numeric-column iteration
+  plotting.py          #   shared matplotlib helpers
+experiments/           # runnable scripts, each imports from maxent/
+  combined.py          #   the primary method (MLE + fidelity fit) -> python -m experiments.combined
+  basis.py             #   least-squares basis reconstruction (does not scale; kept for comparison)
+  visualizer.py        #   Dash app showing how lambdas reshape the distribution
+  dfft.py, maclaurin.py, sampling_data.py
+  deriving_uniform_distribution/lagrange.py   # symbolic derivation
+data/                  # arbitrary datasets used for testing
+outputs/               # generated plots (git-ignored)
+```
+
+Install deps with `pip install -r requirements.txt` and run any experiment as a module from the repo root, e.g. `python -m experiments.combined`.
+
+Note: the MLE and fidelity fits used to be two near-identical optimizers; they are now one `fit(data, objective=...)`. Fidelity was previously defined three separate times and is now a single function in `maxent/metrics.py`. The old hardcoded Windows data paths are gone — paths resolve relative to the repo via `maxent/data.py`.
 
 ### Future Scope
 The future and possible expirements could be considered.
@@ -49,3 +66,11 @@ The future and possible expirements could be considered.
 yields more accurate results.
 2. The optimizer used is scipy's optimizer which is effective though it could also be possible to tune lambdas using the effective solver in QiML. Assuming rather than optimizing hyper-parameters, optimize the lambdas.
 3. Application in low-level hardware. This project was primarily a proof of concept of how it can be used, though it could be beneficial to create a form of online-learning on low-level baseband instruments. But this involves rewriting the implementation in low-level software such as C/C++.
+
+### Related recent work (toward a stronger claim)
+The current method fixes the constraint functions to the first four polynomial moments. The open problem (README "Problem #1") is that *choosing* the constraints presupposes the distribution. Recent work points at the path to a defensible claim:
+- **MEP-Net** (Yang et al., 2024, [arXiv:2412.02090](https://arxiv.org/abs/2412.02090)) — replaces the optimizer with a neural network using a constraint loss + entropy (KL) loss, learning distribution features rather than assuming them.
+- **MaxEnt density estimation with relaxed moment constraints** (Entropy, 2026, [mdpi.com/1099-4300/28/3/282](https://www.mdpi.com/1099-4300/28/3/282)) — convex-analytic theory for the relaxed (`±slack`) constraints this code already uses.
+- **Moment-Guided Diffusion** ([arXiv:2602.17211](https://arxiv.org/pdf/2602.17211)) — moment-matching as guidance for max-entropy generation.
+
+Two candidate claims: (a) make the basis `f_i` learnable so the method *discovers* constraints (resolves Problem #1); (b) characterize when minimizing fidelity beats MLE for heavy-tailed / contaminated data.
