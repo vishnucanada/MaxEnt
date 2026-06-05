@@ -64,10 +64,11 @@ def main():
           f"{min(len(b) for b in banks)}..{max(len(b) for b in banks)}")
 
     # --- H1/H2: federated (no DP) vs centralized vs empirical ---
+    # No DP -> moments are feasible -> exact maxent (reg=0) is near-exact.
     S, N = merge([institution_sketch(b, omega) for b in banks])
-    fed_pdf = readout(S, N, omega, grid, reg=1e-3)
+    fed_pdf = readout(S, N, omega, grid, reg=0.0)
     S_c, N_c = institution_sketch(z, omega)
-    cen_pdf = readout(S_c, N_c, omega, grid, reg=1e-3)
+    cen_pdf = readout(S_c, N_c, omega, grid, reg=0.0)
 
     v_fed, es_fed = var_es(fed_pdf, grid, 0.99)
     v_cen, _ = var_es(cen_pdf, grid, 0.99)
@@ -94,8 +95,10 @@ def main():
         he, he2 = [], []
         for s in range(8):
             r = np.random.default_rng(s)
+            # Under DP, use the minimal fixed reg that keeps the dual bounded
+            # (not tuned per-epsilon).
             S_dp = privatize(S, eps, delta, r, local_count=1)
-            v_h, _ = var_es(readout(S_dp, N, omega, grid, reg=1e-3), grid, 0.99)
+            v_h, _ = var_es(readout(S_dp, N, omega, grid, reg=1e-5), grid, 0.99)
             he.append(abs(z_to_dollars(v_h, transform) - z_to_dollars(v_true_emp, transform)))
             hp = dp_histogram(banks, grid, edges, eps, delta, r)
             v_b, _ = var_es(hp, grid, 0.99)
