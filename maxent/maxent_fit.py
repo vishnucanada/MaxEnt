@@ -20,18 +20,19 @@ from scipy.optimize import minimize
 from scipy.special import logsumexp
 
 
-def fit_maxent(data, feature_fn, grid):
-    """Fit a maximum-entropy density.
+def fit_maxent_from_moments(mu, feature_fn, grid):
+    """Fit a maximum-entropy density to target moments `mu` directly.
 
-    data        : 1-D samples
+    This is the streaming-friendly entry point: `mu` can come from an online
+    bundle hypervector instead of a batch of raw data.
+
+    mu          : (M,) target moments
     feature_fn  : x (array) -> (len(x), M) feature matrix
     grid        : 1-D integration grid spanning the support
 
-    Returns (pdf_on_grid, lambdas, target_moments).
+    Returns (pdf_on_grid, lambdas).
     """
-    mu = feature_fn(data).mean(axis=0)                  # (M,) empirical moments
     phi_grid = feature_fn(grid)                         # (G, M)
-
     dx = np.gradient(grid)
     log_w = np.log(dx)                                  # quadrature log-weights
 
@@ -42,13 +43,21 @@ def fit_maxent(data, feature_fn, grid):
         grad = phi_grid.T @ p - mu
         return logZ - lam @ mu, grad
 
-    lam0 = np.zeros(mu.shape[0])
-    res = minimize(objective, lam0, jac=True, method="L-BFGS-B",
+    res = minimize(objective, np.zeros(mu.shape[0]), jac=True, method="L-BFGS-B",
                    options={"maxiter": 2000})
     lam = res.x
-
     scores = phi_grid @ lam
     pdf = np.exp(scores - logsumexp(scores + log_w))    # normalized to integrate to 1
+    return pdf, lam
+
+
+def fit_maxent(data, feature_fn, grid):
+    """Fit a maximum-entropy density to the empirical moments of `data`.
+
+    Returns (pdf_on_grid, lambdas, target_moments).
+    """
+    mu = feature_fn(data).mean(axis=0)                  # (M,) empirical moments
+    pdf, lam = fit_maxent_from_moments(mu, feature_fn, grid)
     return pdf, lam, mu
 
 
