@@ -1,0 +1,7 @@
+# Extra dependencies for the legacy/ experiments (on top of the core
+# requirements.txt: numpy, scipy, pandas, matplotlib)
+scikit-learn
+seaborn
+sympy
+dash
+plotly

@@ -27,6 +27,7 @@ from .metrics import l1, ks
 from .datasets import (
     true_pdf, sample_distribution, make_consortium, consortium_true_pdf,
 )
+from .study import federated_risk_study, print_study, plot_study
 from .data import ROOT, DATA_DIR, OUTPUT_DIR, dataset_path
 
 __all__ = [
@@ -38,5 +39,6 @@ __all__ = [
     "gaussian_sigma", "var_es", "cdf_from_pdf",
     "l1", "ks",
     "true_pdf", "sample_distribution", "make_consortium", "consortium_true_pdf",
+    "federated_risk_study", "print_study", "plot_study",
     "ROOT", "DATA_DIR", "OUTPUT_DIR", "dataset_path",
 ]

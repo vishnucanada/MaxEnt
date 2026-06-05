@@ -9,8 +9,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
-            "console": "integratedTerminal",
-            "pythonPath": "C:\\Python39\\python.exe"
+            "console": "integratedTerminal"
         }
     ]
 }

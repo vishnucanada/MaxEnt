@@ -6,3 +6,4 @@ data/
 __pycache__/
 outputs/
 .claude
+.DS_Store

@@ -1,9 +1,10 @@
+# Core contribution (maxent/, experiments/, tests/)
 numpy
 scipy
 pandas
 matplotlib
-scikit-learn
-seaborn
-sympy
-dash
-plotly
+
+# Tests (optional; tests also run via `python -m tests.run` without pytest)
+pytest
+
+# The legacy/ experiments need extra packages: see legacy/requirements.txt
