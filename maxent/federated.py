@@ -32,6 +32,23 @@ def merge(sketches):
     return S, N
 
 
+def dp_histogram(banks, grid, edges, epsilon, delta, rng):
+    """Baseline: central-DP merged histogram -> density on `grid`.
+
+    Each record contributes to one bin, so the merged histogram has L2
+    sensitivity 1; the Gaussian mechanism noises the bin counts.
+    """
+    counts = np.zeros(len(edges) - 1)
+    for d in banks:
+        counts += np.histogram(d, bins=edges)[0]
+    sigma = np.sqrt(2.0 * np.log(1.25 / delta)) / epsilon
+    counts = np.clip(counts + rng.normal(0, sigma, len(counts)), 0, None)
+    centers = (edges[:-1] + edges[1:]) / 2
+    area = np.sum(counts * np.diff(edges))
+    dens = (counts / area) if area > 0 else counts
+    return np.interp(grid, centers, dens)
+
+
 def gaussian_sigma(epsilon, delta, M):
     """Std-dev per real coordinate for (eps, delta)-DP Gaussian mechanism.
 
