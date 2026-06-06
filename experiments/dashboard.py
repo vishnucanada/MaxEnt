@@ -14,8 +14,7 @@ Datasets: 'synthetic' (instant) and 'creditcard' (needs data/creditcard.csv).
 
 import numpy as np
 import dash
-from dash import dcc, html
-from dash.dependencies import Input, Output, State
+from dash import dcc, html, Input, Output, State  # top-level (works on Dash 2.x and 3.x)
 import plotly.graph_objs as go
 
 from maxent import (

@@ -1,0 +1,11 @@
+numpy
+scipy
+pandas
+matplotlib
+
+[dashboard]
+dash
+plotly
+
+[test]
+pytest

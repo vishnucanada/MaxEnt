@@ -2,10 +2,12 @@
 
 import numpy as np
 
+from ._compat import trapz
+
 
 def l1(p, q, grid):
     """L1 (total-variation x2) distance between two densities on `grid`."""
-    return np.trapz(np.abs(np.asarray(p) - np.asarray(q)), grid)
+    return trapz(np.abs(np.asarray(p) - np.asarray(q)), grid)
 
 
 def ks(p, q, grid):

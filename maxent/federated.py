@@ -14,6 +14,7 @@ calibrated global density via the maximum-entropy readout.
 
 import numpy as np
 
+from ._compat import trapz
 from .hdc import encode
 from .maxent_fit import fit_maxent_from_moments, fourier_features
 
@@ -96,6 +97,6 @@ def var_es(pdf, grid, level=0.99):
     cdf = cdf_from_pdf(pdf, grid)
     var = np.interp(level, cdf, grid)
     mask = grid >= var
-    tail_mass = np.trapz(pdf[mask], grid[mask])
-    es = np.trapz(grid[mask] * pdf[mask], grid[mask]) / tail_mass if tail_mass > 0 else var
+    tail_mass = trapz(pdf[mask], grid[mask])
+    es = trapz(grid[mask] * pdf[mask], grid[mask]) / tail_mass if tail_mass > 0 else var
     return var, es

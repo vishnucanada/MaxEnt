@@ -27,6 +27,8 @@ estimation, which is the hardware-friendly angle.
 
 import numpy as np
 
+from ._compat import trapz
+
 
 def sample_frequencies(dim, bandwidth=1.0, kind="gaussian", seed=None):
     """Draw the random frequencies omega that define the kernel.
@@ -75,5 +77,5 @@ def density_estimate(hypervector, query_x, omega, normalize_grid=None):
     g = readout(hypervector, query_x, omega)
     g = np.clip(g, 0, None)  # density is non-negative
     grid = query_x if normalize_grid is None else normalize_grid
-    area = np.trapz(np.clip(readout(hypervector, grid, omega), 0, None), grid)
+    area = trapz(np.clip(readout(hypervector, grid, omega), 0, None), grid)
     return g / area if area > 0 else g
