@@ -43,6 +43,7 @@ maxent/                     # the library (single source of truth)
   hdc.py                    #   VFA/RFF encoding, bundling, kernel readout
   maxent_fit.py             #   convex-dual maxent (exact + relaxed) and feature factories
   federated.py              #   sketch / merge / privatize / readout / VaR-ES / dp_histogram
+  study.py                  #   reusable federated risk study (driver + print + plot)
   metrics.py                #   density distances (l1, ks)
   datasets.py               #   synthetic test distributions + non-IID consortium
   data.py                   #   filesystem paths
@@ -52,7 +53,9 @@ experiments/                # self-contained studies; each imports only from max
   method_stability.py       #   accuracy-per-constraint / stability (key method result)
   federated_synthetic.py    #   H1 lossless merge, H2 communication, H4 non-IID
   federated_dp_sweep.py     #   H3 privacy sweep vs DP-histogram (synthetic)
-  federated_creditcard.py   #   H1-H3 on real ULB credit-card Amount data
+  federated_creditcard.py   #   H1-H3 on real ULB Amount (simulated non-IID partition)
+  federated_ibm_aml.py      #   H1-H3 on real IBM AML data (natural bank federation)
+  dashboard.py              #   real-time Dash app: watch the merge + drag privacy ε
 tests/                      # invariant tests (merge lossless, relaxation, etc.)
 docs/                       # proposal / problem statement
 legacy/                     # the original MLE / fidelity MaxEnt exploration (unused by the above)
@@ -74,6 +77,9 @@ python -m experiments.federated_creditcard
 
 # tests (no pytest needed; pytest also works)
 python -m tests.run
+
+# real-time dashboard (needs: pip install dash plotly), then open http://127.0.0.1:8050
+python -m experiments.dashboard
 ```
 
 ## Legacy

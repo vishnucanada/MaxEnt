@@ -7,4 +7,8 @@ matplotlib
 # Tests (optional; tests also run via `python -m tests.run` without pytest)
 pytest
 
+# Real-time dashboard (experiments/dashboard.py)
+dash
+plotly
+
 # The legacy/ experiments need extra packages: see legacy/requirements.txt
