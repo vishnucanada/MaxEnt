@@ -3,6 +3,7 @@
 import numpy as np
 
 from maxent import sample_frequencies, bundle, density_estimate, kernel
+from maxent._compat import trapz
 
 
 def test_kernel_peak_at_zero():
@@ -16,5 +17,5 @@ def test_bundle_readout_normalized_and_centered():
     omega = sample_frequencies(3000, 2.0, "gaussian", 1)
     grid = np.linspace(-5, 5, 600)
     pdf = density_estimate(bundle(data, omega), grid, omega, normalize_grid=grid)
-    assert abs(np.trapz(pdf, grid) - 1.0) < 1e-2     # integrates to 1
+    assert abs(trapz(pdf, grid) - 1.0) < 1e-2        # integrates to 1
     assert abs(grid[np.argmax(pdf)]) < 0.5           # peak near the true mean

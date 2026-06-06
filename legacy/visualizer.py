@@ -7,9 +7,10 @@ Run from the repo root:  python -m legacy.visualizer
 import numpy as np
 import scipy.integrate as integrate
 import dash
-from dash import dcc, html
-from dash.dependencies import Input, Output
+from dash import dcc, html, Input, Output  # top-level (works on Dash 2.x and 3.x)
 import plotly.graph_objs as go
+
+from maxent._compat import trapz
 
 from legacy.core import pdf
 
@@ -63,7 +64,7 @@ def update_plot(lambda_2, lambda_3, average):
     layout = go.Layout(title=title, xaxis={"title": "x"}, yaxis={"title": "PDF(x)"}, annotations=[])
     output_text = [
         f"Is PDF non-negative? {np.all(y >= 0)}",
-        f"Approximate integral of PDF: {np.trapz(y, x):.4f}",
+        f"Approximate integral of PDF: {trapz(y, x):.4f}",
     ]
     return {"data": [go.Scatter(x=x, y=y, mode="lines", name="PDF")], "layout": layout}, output_text
 

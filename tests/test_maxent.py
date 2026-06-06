@@ -6,6 +6,7 @@ from maxent import (
     fit_maxent, fit_maxent_from_moments, fourier_features, sample_frequencies,
     true_pdf, l1,
 )
+from maxent._compat import trapz
 
 
 def test_recovers_gaussian():
@@ -27,7 +28,7 @@ def test_relaxation_stabilizes_noisy_moments():
     mu_noisy = ff(rng.normal(0, 1, 4000)).mean(0) + rng.normal(0, 0.05, 16)
 
     pdf, lam = fit_maxent_from_moments(mu_noisy, ff, grid, reg=1e-2)
-    assert np.isfinite(pdf).all() and abs(np.trapz(pdf, grid) - 1.0) < 1e-2
+    assert np.isfinite(pdf).all() and abs(trapz(pdf, grid) - 1.0) < 1e-2
 
     _, lam_exact = fit_maxent_from_moments(mu_noisy, ff, grid, reg=0.0)
     assert np.linalg.norm(lam) < np.linalg.norm(lam_exact)
